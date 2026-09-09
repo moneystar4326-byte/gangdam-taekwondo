@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://moneystar4326-byte.github.io/gangdam-taekwondo/sitemap.xml

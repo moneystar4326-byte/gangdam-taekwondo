@@ -132,10 +132,22 @@
 
 회비와 시간표는 `consult.html` 스크립트 안의 `FEE`, `SLOTS` 값을 고치면 됩니다.
 
+## 입관 상담 카탈로그 (`brochure.html`)
+
+학부모 상담 때 보여드리고 인쇄해서 건네는 **A4 11쪽 안내 책자**입니다.
+
+- 주소: `https://moneystar4326-byte.github.io/gangdam-taekwondo/brochure.html`
+- 태블릿: 위쪽 ‹ › 버튼이나 스크롤로 한 쪽씩 넘겨 봅니다
+- 인쇄: **인쇄 · PDF** → 용지 A4, 여백 없음, **배경 그래픽 켬**
+- 구성: 표지 · 관장 인사 · 강담을 고르는 이유와 후기 · 프로그램 · 시간표 · 수강료와 입관 비용(손으로 적는 칸)
+  · 승급 체계 · 띠별 교육과정 · 연간 인성교육 · 시설 · 등록 절차와 오시는 길, QR, 상담 메모
+- 승급 체계 · 교육과정 · 인성교육 쪽은 `tools/belt_build.py`가 AI 사범님 데이터로 채웁니다
+- 인성교육 쪽은 **인쇄한 달**의 주제가 강조됩니다
+
 ## AI 사범님 데이터 다시 반영하기
 
 AI 사범님 프로그램에서 띠·교육과정·인성 주제를 고친 뒤 아래를 실행하면
-`index.html`의 승급 체계 섹션, `catalog.html`, `consult.html`의 승급 데이터가 한 번에 갱신됩니다.
+`index.html`의 승급 체계 섹션, `catalog.html`, `consult.html`, `brochure.html`의 승급 데이터가 한 번에 갱신됩니다.
 
 ```
 python tools/belt_build.py

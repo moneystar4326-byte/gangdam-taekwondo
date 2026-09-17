@@ -4,6 +4,7 @@
     index.html   「띠 승급 체계」 섹션 (BELT:START ~ BELT:END)
     catalog.html  띠별 교육과정 카탈로그
     consult.html  입관 상담 페이지의 승급 데이터
+    brochure.html 입관 상담 카탈로그의 승급·교육과정·인성 데이터
 
 사용법:  python tools/belt_build.py
 원본(AI 사범님 폴더)은 읽기만 한다. 학생 인원 수는 공개 페이지에 싣지 않고,
@@ -168,6 +169,26 @@ if os.path.exists(cp):
                    lambda mm: mm.group(1) + blob + mm.group(2), c, count=1, flags=re.S)
     assert n == 1, 'consult.html 에 belt-data 자리가 없습니다'
     io.open(cp, 'w', encoding='utf-8').write(c)
+
+# ------------------------------------------------------- brochure.html 데이터
+brochure = {
+    'steps': [{'name': x['name'], 'ranks': x['ranks'], 'months': x['months'],
+               'style': x['style'], 'cord': cord(x['style']),
+               'parent': x.get('parent', ''), 'goal': x.get('goal', ''),
+               'learn': x.get('learn') or [], 'kick': x.get('kick') or []}
+              for x in steps],
+    'virtues': [{'no': m['no'], 'virtue': m.get('virtue', ''), 'line': m.get('line', '')}
+                for m in data['months']],
+}
+bp = os.path.join(SITE, 'brochure.html')
+if os.path.exists(bp):
+    b = io.open(bp, encoding='utf-8').read()
+    blob = json.dumps(brochure, ensure_ascii=False).replace('</', r'<\/')
+    b, n = re.subn(r'(<script id="brochure-data" type="application/json">).*?(</script>)',
+                   lambda mm: mm.group(1) + blob + mm.group(2), b, count=1, flags=re.S)
+    assert n == 1, 'brochure.html 에 brochure-data 자리가 없습니다'
+    assert not MOBILE.search(blob)
+    io.open(bp, 'w', encoding='utf-8').write(b)
 
 print('steps=%d (급 %d, 품 %d) virtues=%d' % (len(steps), len(kup), len(poom), len(data['months'])))
 print('catalog.html %d KB, 휴대폰 번호 잔존=%d, consult 데이터=%d단계' % (

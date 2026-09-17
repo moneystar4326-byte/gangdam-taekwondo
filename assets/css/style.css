@@ -343,6 +343,39 @@ button{cursor:pointer;border:0;background:none;}
   font-size:17px;font-weight:600;line-height:1.8;color:rgba(255,255,255,.9);letter-spacing:-.02em;
 }
 
+/* ---------- Belt system ---------- */
+.belt-strip{display:flex;height:14px;border-radius:999px;overflow:hidden;border:1px solid var(--line);margin:0 auto 48px;max-width:760px;}
+.belt-strip span{flex:1;}
+.belt-group{display:flex;align-items:baseline;gap:12px;font-size:20px;font-weight:900;letter-spacing:-.035em;margin:0 0 16px;}
+.belt-group small{font-size:14px;font-weight:700;color:var(--ink-400);}
+.belts{display:grid;gap:12px;}
+.belt{
+  display:grid;grid-template-columns:14px 200px 1fr;align-items:stretch;
+  background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+}
+.belt__cord{display:block;}
+.belt__cord--light{box-shadow:inset -1px 0 0 var(--line);}
+.belt__head{padding:20px 22px;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center;gap:4px;}
+.belt__head b{font-size:19px;font-weight:900;letter-spacing:-.04em;}
+.belt__head span{font-size:13px;font-weight:700;color:var(--blue-600);font-variant-numeric:tabular-nums;}
+.belt__body{padding:18px 22px;display:flex;flex-direction:column;justify-content:center;gap:10px;}
+.belt__body p{margin:0;font-size:15.5px;line-height:1.7;color:var(--ink-700);}
+.belt__tags{display:flex;flex-wrap:wrap;gap:6px;}
+.belt__tags span{font-size:12.5px;font-weight:700;padding:5px 11px;border-radius:999px;background:var(--paper);color:var(--navy-700);}
+.belt-knot{display:flex;align-items:center;gap:14px;margin:34px 0;color:var(--red-600);font-size:14px;font-weight:900;letter-spacing:.02em;}
+.belt-knot::before,.belt-knot::after{content:"";flex:1;height:2px;background:linear-gradient(90deg,transparent,var(--red-500),transparent);}
+.belt-foot{margin-top:40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  padding:24px 28px;border-radius:var(--radius);background:var(--paper);}
+.belt-foot p{margin:0;flex:1;min-width:260px;font-size:15px;line-height:1.7;color:var(--ink-700);}
+@media (max-width:700px){
+  .belt{grid-template-columns:10px 1fr;}
+  .belt__head{border-right:0;border-bottom:1px solid var(--line);padding:16px 18px 12px;flex-direction:row;align-items:baseline;justify-content:space-between;}
+  .belt__body{grid-column:2;padding:14px 18px 18px;}
+  .belt__cord{grid-row:span 2;}
+  .belt-foot{padding:22px 20px;}
+  .belt-foot .btn{width:100%;}
+}
+
 /* ---------- Timetable ---------- */
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);border:1px solid var(--line);background:#fff;box-shadow:var(--shadow-sm);}
 .table-hint{display:none;align-items:center;gap:7px;margin-bottom:12px;font-size:13.5px;font-weight:700;color:var(--blue-600);}

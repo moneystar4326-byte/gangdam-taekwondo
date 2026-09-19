@@ -36,21 +36,60 @@
 
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"SportsActivityLocation",
-  "name":"강담태권도",
-  "description":"용인대학교 태권도학과 석사 · 태권도 8단 김지환 관장이 직접 지도하는 서울 동작구 신대방동 태권도장. 유치부·초등부 태권도, 국기원반, 시범단, 전문 줄넘기반 운영.",
-  "address":{
-    "@type":"PostalAddress",
-    "addressCountry":"KR",
-    "addressRegion":"서울특별시",
-    "addressLocality":"동작구",
-    "streetAddress":"여의대방로10길 38 보라매롯데낙천대아파트 상가 2층"
+  "@context": "https://schema.org",
+  "@type": "SportsActivityLocation",
+  "name": "강담태권도",
+  "description": "용인대학교 태권도학과 석사 · 태권도 8단 김지환 관장이 직접 지도하는 서울 동작구 신대방동 태권도장. 유치부·초등부 태권도, 국기원반, 시범단, 전문 줄넘기반 운영.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "KR",
+    "addressRegion": "서울특별시",
+    "addressLocality": "동작구",
+    "streetAddress": "여의대방로10길 38 보라매롯데낙천대아파트 상가 2층"
   },
-  "geo":{"@type":"GeoCoordinates","latitude":37.4945782,"longitude":126.9145016},
-  "telephone":"0507-1307-7239",
-  "openingHours":["Mo-Fr 12:00-20:00","Sa 10:00-11:00"],
-  "sameAs":["https://blog.naver.com/tkd1102","https://map.naver.com/p/entry/place/36667745"]
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 37.4945782,
+    "longitude": 126.9145016
+  },
+  "telephone": "0507-1307-7239",
+  "openingHours": [
+    "Mo-Fr 12:00-20:00",
+    "Sa 10:00-11:00"
+  ],
+  "sameAs": [
+    "https://blog.naver.com/tkd1102",
+    "https://map.naver.com/p/entry/place/36667745",
+    "https://map.naver.com/p/entry/place/36667745?placePath=%2Fticket"
+  ],
+  "url": "https://moneystar4326-byte.github.io/gangdam-taekwondo/",
+  "image": [
+    "https://moneystar4326-byte.github.io/gangdam-taekwondo/assets/img/hall-main.jpg",
+    "https://moneystar4326-byte.github.io/gangdam-taekwondo/assets/img/master.jpg"
+  ],
+  "hasMap": "https://map.naver.com/p/entry/place/36667745",
+  "logo": "https://moneystar4326-byte.github.io/gangdam-taekwondo/assets/img/logo.png",
+  "areaServed": [
+    "서울 동작구 신대방동",
+    "서울 동작구 대방동",
+    "보라매"
+  ],
+  "potentialAction": {
+    "@type": "ReserveAction",
+    "name": "1일 체험수업 · 가입 상담 예약",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://map.naver.com/p/entry/place/36667745?placePath=%2Fticket",
+      "actionPlatform": [
+        "http://schema.org/DesktopWebPlatform",
+        "http://schema.org/MobileWebPlatform"
+      ]
+    },
+    "result": {
+      "@type": "Reservation",
+      "name": "체험수업 예약"
+    }
+  }
 }
 </script>
 </head>

@@ -6,6 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Brush+Script&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 *{box-sizing:border-box}
 html,body{overflow-x:hidden}
@@ -58,7 +59,7 @@ button.sub{background:#fff;color:#0B1B3A;border:1px solid #0B1B3A}
   <div class="hint">네이버 지도에서 <b>우리 도장을 눌러 연 뒤</b> 주소창 주소를 붙여 넣으면, 도장 번호만 찾아 <b>리뷰 화면 주소로 자동 변환</b>합니다. 도장 번호(숫자)만 넣어도 됩니다.</div>
   <div class="hint" id="conv"></div>
   <label>색 (선택)</label><input id="color" value="#0B1B3A">
-  <button onclick="make()">안내문 만들기</button>
+  <div class="hint">입력하면 아래 미리보기가 바로 바뀝니다.</div>
 </div>
 
 <div class="card" id="printarea">
@@ -71,8 +72,8 @@ button.sub{background:#fff;color:#0B1B3A;border:1px solid #0B1B3A}
     <div class="note">네이버 플레이스 리뷰 화면으로 연결됩니다.<br>남겨 주신 이야기는 <b>수업을 더 좋게 만드는 데</b> 쓰겠습니다.</div>
     <div class="bar" id="bar"></div>
   </div></div>
-  <button class="sub" onclick="window.print()">인쇄 · PDF 저장 (PC 권장)</button>
-  <div class="hint">인쇄 설정: 용지 A4, 여백 없음, 배경 그래픽 켬</div>
+  <button class="sub" id="savebtn" onclick="saveImg()">이미지 저장</button>
+  <div class="hint">A4 비율 고화질 이미지(PNG)로 저장됩니다. 그대로 인쇄하거나 학부모 단톡방에 올리세요.</div>
 </div>
 
 <div class="card">
@@ -123,5 +124,26 @@ function make(){
     $('msgs').append(h,d,b);});
   fit();
 }
+async function saveImg(){
+  const b=$('savebtn');b.textContent='만드는 중...';b.disabled=true;
+  make(); // 입력한 최신 내용으로 다시 만든 뒤 저장
+  try{
+    await document.fonts.ready;
+    // 화면 크기로 줄여 둔 안내문을 원본 크기(1240x1754)로 복제해서 캡처
+    const clone=$('poster').cloneNode(true);
+    clone.style.cssText='position:fixed;left:-99999px;top:0;transform:none';
+    const qc=$('q').querySelector('canvas'),cc=clone.querySelector('#q canvas');
+    if(qc&&cc) cc.getContext('2d').drawImage(qc,0,0);
+    document.body.appendChild(clone);
+    const canvas=await html2canvas(clone,{scale:1,backgroundColor:null,useCORS:true});
+    clone.remove();
+    const a=document.createElement('a');
+    a.download=($('name').value||'도장')+'_리뷰안내문.png';
+    a.href=canvas.toDataURL('image/png');a.click();
+    b.textContent='저장됨 ✓';
+  }catch(e){b.textContent='저장 실패, 다시 눌러 주세요';}
+  setTimeout(()=>{b.textContent='이미지 저장';b.disabled=false},2000);
+}
+['name','url','color'].forEach(id=>$(id).addEventListener('input',make));
 window.addEventListener('resize',fit);make();
 </script></body></html>

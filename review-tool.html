@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>학부모 리뷰 안내문 만들기 | 태권도장 100명 만들기</title>
+<meta name="description" content="도장 이름과 네이버 리뷰 주소만 넣으면 QR이 들어간 A4 리뷰 안내문과 학부모 문자 템플릿을 만들 수 있는 무료 도구">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.css">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{margin:0;font-family:Pretendard,sans-serif;background:#eef0f4;color:#1d1d1b}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-family:"Black Han Sans";font-weight:400;font-size:30px;margin:8px 0 4px}
+.lead{color:#555;margin:0 0 18px;line-height:1.6;font-size:15px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 4px 14px rgba(0,0,0,.05)}
+.card h2{font-size:18px;margin:0 0 12px}
+label{display:block;font-size:14px;font-weight:700;margin:10px 0 6px}
+input{width:100%;min-width:0;padding:12px;border:1px solid #ccd;border-radius:10px;font:inherit;font-size:16px}
+.hint{font-size:13px;color:#777;margin-top:6px;line-height:1.5}
+button{width:100%;margin-top:14px;padding:14px;border:0;border-radius:10px;background:#0B1B3A;color:#fff;font-weight:800;font-size:16px;cursor:pointer}
+button.sub{background:#fff;color:#0B1B3A;border:1px solid #0B1B3A}
+.stage{position:relative;width:100%;overflow:hidden;border-radius:10px;background:#fff}
+.p{position:absolute;left:0;top:0;width:1240px;height:1754px;background:#F4F6FA;color:#0B1B3A;overflow:hidden;transform-origin:0 0}
+.top{padding:110px 90px 120px;color:#fff}
+.tag{display:inline-block;background:#E9B949;color:#060F26;font-weight:800;font-size:36px;padding:10px 24px;border-radius:8px}
+.p h3{font-family:"Black Han Sans";font-weight:400;font-size:120px;line-height:1.1;margin:40px 0 0;letter-spacing:-3px}
+.p h3 em{font-style:normal;color:#E9B949}
+.brush{font-family:"Nanum Brush Script";font-size:72px;margin-top:30px;color:#dfe6f5}
+.qr{position:absolute;left:50%;top:850px;transform:translateX(-50%);background:#fff;padding:36px;border-radius:28px;box-shadow:0 20px 50px rgba(6,15,38,.18);text-align:center}
+.qr #q{width:460px;height:460px}.qr #q img,.qr #q canvas{width:460px!important;height:460px!important}
+.qr p{margin:18px 0 0;font-weight:800;font-size:38px}
+.note{position:absolute;left:90px;right:90px;top:1430px;text-align:center;font-size:34px;line-height:1.6;color:#33415c}
+.note b{color:#E1352C}
+.bar{position:absolute;left:0;right:0;bottom:0;height:90px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:30px}
+.msg{background:#f6f7f9;border-radius:10px;padding:14px;white-space:pre-wrap;line-height:1.6;font-size:15px}
+.msg+button{margin-bottom:18px}
+.rule li{margin-bottom:6px;line-height:1.6}
+.foot{text-align:center;color:#777;font-size:13px;line-height:1.7}
+.foot a{color:#0B1B3A}
+@media print{
+  body{background:#fff}.wrap>*:not(#printarea){display:none!important}
+  .wrap{padding:0;max-width:none}#printarea{display:block!important;margin:0;padding:0;box-shadow:none}
+  #printarea h2{display:none}.stage{width:auto!important;height:auto!important;border-radius:0;overflow:visible}
+  .p{position:relative!important}
+  .p{transform:none!important;zoom:.6}
+  @page{size:210mm 297mm;margin:0}
+}
+</style></head><body><div class="wrap">
+<h1>학부모 리뷰 안내문 만들기</h1>
+<p class="lead">도장 이름과 네이버 리뷰 주소만 넣으면 QR이 들어간 A4 안내문이 만들어집니다.<br>무료 나눔 · 태권도장 100명 만들기 (용감한개발자, 강담태권도 사범)</p>
+
+<div class="card">
+  <h2>1. 정보 넣기</h2>
+  <label>도장 이름</label><input id="name" value="○○태권도">
+  <label>네이버 플레이스 리뷰 주소</label>
+  <input id="url" placeholder="https://m.place.naver.com/place/숫자/review/visitor">
+  <div class="hint">찾는 법: 네이버 지도에서 우리 도장을 열면 주소창에 <b>place/숫자</b>가 보입니다.<br>그 숫자를 넣어 <b>https://m.place.naver.com/place/숫자/review/visitor</b> 로 만드세요.</div>
+  <label>색 (선택)</label><input id="color" value="#0B1B3A">
+  <button onclick="make()">안내문 만들기</button>
+</div>
+
+<div class="card" id="printarea">
+  <h2>2. 미리보기</h2>
+  <div class="stage" id="stage"><div class="p" id="poster">
+    <div class="top" id="top"><span class="tag">학부모님께</span>
+      <h3>우리 아이<br>도장 이야기를<br><em>들려주세요</em></h3>
+      <div class="brush">좋았던 점도, 아쉬운 점도 솔직하게</div></div>
+    <div class="qr"><div id="q"></div><p>휴대폰 카메라로 찍어 주세요</p></div>
+    <div class="note">네이버 플레이스 리뷰 화면으로 연결됩니다.<br>남겨 주신 이야기는 <b>수업을 더 좋게 만드는 데</b> 쓰겠습니다.</div>
+    <div class="bar" id="bar"></div>
+  </div></div>
+  <button class="sub" onclick="window.print()">인쇄 · PDF 저장 (PC 권장)</button>
+  <div class="hint">인쇄 설정: 용지 A4, 여백 없음, 배경 그래픽 켬</div>
+</div>
+
+<div class="card">
+  <h2>3. 학부모 문자 템플릿</h2>
+  <ul class="rule">
+    <li>리뷰에 <b>혜택·대가를 걸지 않습니다</b> (네이버 정책 위반, 표시광고법 문제)</li>
+    <li>"좋게 써 주세요"가 아니라 <b>솔직한 후기</b>를 부탁합니다</li>
+    <li>전체 발송보다 좋은 일이 있었던 반·가정부터 조금씩 보냅니다</li>
+  </ul>
+  <div id="msgs"></div>
+</div>
+
+<p class="foot">만든 사람: 용감한개발자 (세계태권도연맹 시범단 출신 · 6단 · 강담태권도 사범)<br>
+유튜브 <a href="https://www.youtube.com/@taekwondo100">@taekwondo100</a> ·
+인스타·스레드 @taekwondo100.kr ·
+<a href="https://open.kakao.com/o/gCEkY0vi">태권도장 AI 실행방</a></p>
+</div>
+<script>
+const MSGS=[
+ ["① 연휴·방학 뒤","안녕하세요, {도장} 관장 ○○○입니다.\n이번 주부터 다시 힘차게 수업합니다.\n혹시 시간이 되시면 네이버에 도장 후기를 남겨 주시면 큰 힘이 됩니다.\n좋았던 점도, 아쉬운 점도 솔직하게 적어 주시면 수업을 더 좋게 만드는 데 쓰겠습니다.\n{링크}"],
+ ["② 승급심사 뒤","안녕하세요, {도장}입니다.\n오늘 [아이 이름]이가 [띠]로 승급했습니다. 그동안 꾸준히 보내 주셔서 감사합니다.\n시간이 되시면 네이버에 도장 후기를 남겨 주세요. 좋았던 점도, 아쉬운 점도 솔직하게요.\n{링크}"],
+ ["③ 등록 한 달째","안녕하세요, {도장}입니다.\n[아이 이름]이가 도장에 다닌 지 한 달이 되었습니다. 요즘 [실제로 본 변화 한 줄]\n한 달 다녀 보신 느낌을 네이버 후기로 남겨 주시면, 도장을 찾는 다른 부모님께 도움이 됩니다.\n{링크}"]];
+const $=id=>document.getElementById(id);
+function fit(){const w=$('stage').clientWidth;const s=w/1240;$('poster').style.transform=`scale(${s})`;$('stage').style.height=(1754*s)+'px';}
+function make(){
+  const c=$('color').value||'#0B1B3A',n=$('name').value||'○○태권도',u=$('url').value.trim()||'https://m.place.naver.com';
+  $('top').style.background=c;$('bar').style.background=c;$('bar').textContent=n;
+  $('q').innerHTML='';new QRCode($('q'),{text:u,width:460,height:460});
+  $('msgs').innerHTML='';
+  MSGS.forEach(([t,m])=>{const txt=m.replaceAll('{도장}',n).replaceAll('{링크}',$('url').value.trim()||'[리뷰 링크]');
+    const h=document.createElement('h2');h.textContent=t;h.style.fontSize='15px';h.style.margin='14px 0 8px';
+    const d=document.createElement('div');d.className='msg';d.textContent=txt;
+    const b=document.createElement('button');b.className='sub';b.textContent='문자 복사';
+    b.onclick=()=>{navigator.clipboard.writeText(txt).then(()=>{b.textContent='복사됨 ✓';setTimeout(()=>b.textContent='문자 복사',1500)})};
+    $('msgs').append(h,d,b);});
+  fit();
+}
+window.addEventListener('resize',fit);make();
+</script></body></html>

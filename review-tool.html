@@ -53,9 +53,10 @@ button.sub{background:#fff;color:#0B1B3A;border:1px solid #0B1B3A}
 <div class="card">
   <h2>1. 정보 넣기</h2>
   <label>도장 이름</label><input id="name" value="○○태권도">
-  <label>네이버 플레이스 리뷰 주소</label>
-  <input id="url" placeholder="https://m.place.naver.com/place/숫자/review/visitor">
-  <div class="hint">찾는 법: 네이버 지도에서 우리 도장을 열면 주소창에 <b>place/숫자</b>가 보입니다.<br>그 숫자를 넣어 <b>https://m.place.naver.com/place/숫자/review/visitor</b> 로 만드세요.</div>
+  <label>네이버 지도 주소 (아무 주소나 붙여 넣으세요)</label>
+  <input id="url" placeholder="네이버 지도에서 우리 도장을 열고 주소창 주소를 그대로 복사">
+  <div class="hint">네이버 지도에서 <b>우리 도장을 눌러 연 뒤</b> 주소창 주소를 붙여 넣으면, 도장 번호만 찾아 <b>리뷰 화면 주소로 자동 변환</b>합니다. 도장 번호(숫자)만 넣어도 됩니다.</div>
+  <div class="hint" id="conv"></div>
   <label>색 (선택)</label><input id="color" value="#0B1B3A">
   <button onclick="make()">안내문 만들기</button>
 </div>
@@ -96,12 +97,25 @@ const MSGS=[
  ["③ 등록 한 달째","안녕하세요, {도장}입니다.\n[아이 이름]이가 도장에 다닌 지 한 달이 되었습니다. 요즘 [실제로 본 변화 한 줄]\n한 달 다녀 보신 느낌을 네이버 후기로 남겨 주시면, 도장을 찾는 다른 부모님께 도움이 됩니다.\n{링크}"]];
 const $=id=>document.getElementById(id);
 function fit(){const w=$('stage').clientWidth;const s=w/1240;$('poster').style.transform=`scale(${s})`;$('stage').style.height=(1754*s)+'px';}
+// 어떤 네이버 주소든 도장 번호(place id)를 찾아 짧은 리뷰 주소로 바꿈
+function reviewUrl(raw){
+  raw=(raw||'').trim(); if(!raw) return {url:'',msg:''};
+  let id=null;
+  if(/^\d{5,}$/.test(raw)) id=raw;
+  const m=raw.match(/place\/(\d{5,})/)||raw.match(/[?&]placeId=(\d{5,})/)||raw.match(/entry\/place\/(\d{5,})/);
+  if(m) id=m[1];
+  if(id) return {url:`https://m.place.naver.com/place/${id}/review/visitor`,msg:`✓ 도장 번호 ${id} → 리뷰 주소로 바꿨습니다`,ok:true};
+  if(/naver\.me\//.test(raw)) return {url:raw,msg:'naver.me 짧은 주소는 그대로 씁니다 (도장 홈 화면으로 연결)',ok:true};
+  return {url:'',msg:'⚠ 도장 번호를 못 찾았습니다. 네이버 지도 검색 결과에서 우리 도장을 한 번 눌러 연 뒤 주소를 다시 복사해 주세요.',ok:false};
+}
 function make(){
-  const c=$('color').value||'#0B1B3A',n=$('name').value||'○○태권도',u=$('url').value.trim()||'https://m.place.naver.com';
+  const r=reviewUrl($('url').value);
+  $('conv').textContent=r.msg; $('conv').style.color=r.ok===false?'#E1352C':'#1d7a46';
+  const c=$('color').value||'#0B1B3A',n=$('name').value||'○○태권도',u=r.url||'https://m.place.naver.com';
   $('top').style.background=c;$('bar').style.background=c;$('bar').textContent=n;
   $('q').innerHTML='';new QRCode($('q'),{text:u,width:460,height:460});
   $('msgs').innerHTML='';
-  MSGS.forEach(([t,m])=>{const txt=m.replaceAll('{도장}',n).replaceAll('{링크}',$('url').value.trim()||'[리뷰 링크]');
+  MSGS.forEach(([t,m])=>{const txt=m.replaceAll('{도장}',n).replaceAll('{링크}',r.url||'[리뷰 링크]');
     const h=document.createElement('h2');h.textContent=t;h.style.fontSize='15px';h.style.margin='14px 0 8px';
     const d=document.createElement('div');d.className='msg';d.textContent=txt;
     const b=document.createElement('button');b.className='sub';b.textContent='문자 복사';

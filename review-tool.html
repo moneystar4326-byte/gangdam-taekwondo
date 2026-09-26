@@ -74,8 +74,10 @@ button.sub{background:#fff;color:#0B1B3A;border:1px solid #0B1B3A}
     <div class="note">네이버 플레이스 리뷰 화면으로 연결됩니다.<br>남겨 주신 이야기는 <b>수업을 더 좋게 만드는 데</b> 쓰겠습니다.</div></div>
     <div class="bar" id="bar"></div>
   </div></div>
-  <button class="sub" id="savebtn" onclick="saveImg()">이미지 저장</button>
-  <div class="hint">A4 비율 고화질 이미지(PNG)로 저장됩니다. 그대로 인쇄하거나 학부모 단톡방에 올리세요.</div>
+  <button class="sub" id="savebtn" onclick="saveImg()">이미지 저장 (A4 인쇄용)</button>
+  <div class="hint">📍 <b>도장에 붙이는 용도</b>입니다. A4로 인쇄해 입구·상담 책상·대기실에 붙이면 학부모님이 휴대폰 카메라로 찍습니다.</div>
+  <button class="sub" id="linkbtn" onclick="copyLink()">리뷰 링크 복사 (문자·단톡방용)</button>
+  <div class="hint">📱 문자나 단톡방에는 QR 이미지 대신 <b>이 링크</b>를 보내세요. 휴대폰에 온 QR은 같은 휴대폰으로 찍을 수 없습니다.</div>
 </div>
 
 <div class="card">
@@ -130,10 +132,15 @@ function make(){
   fit();
 }
 let READY=false;
+function copyLink(){
+  const b=$('linkbtn'); const r=reviewUrl($('url').value);
+  if(!r.url){b.textContent='네이버 지도 주소를 먼저 넣어 주세요';$('url').focus();setTimeout(()=>b.textContent='리뷰 링크 복사 (문자·단톡방용)',2000);return;}
+  navigator.clipboard.writeText(r.url).then(()=>{b.textContent='복사됨 ✓ '+r.url;setTimeout(()=>b.textContent='리뷰 링크 복사 (문자·단톡방용)',2500)});
+}
 async function saveImg(){
   const b=$('savebtn');b.textContent='만드는 중...';b.disabled=true;
   make(); // 입력한 최신 내용으로 다시 만든 뒤 저장
-  if(!READY){b.textContent='네이버 지도 주소를 먼저 넣어 주세요';b.disabled=false;$('url').focus();setTimeout(()=>b.textContent='이미지 저장',2000);return;}
+  if(!READY){b.textContent='네이버 지도 주소를 먼저 넣어 주세요';b.disabled=false;$('url').focus();setTimeout(()=>b.textContent='이미지 저장 (A4 인쇄용)',2000);return;}
   try{
     await document.fonts.ready;
     // 화면 크기로 줄여 둔 안내문을 원본 크기(1240x1754)로 복제해서 캡처
@@ -149,7 +156,7 @@ async function saveImg(){
     a.href=canvas.toDataURL('image/png');a.click();
     b.textContent='저장됨 ✓';
   }catch(e){b.textContent='저장 실패, 다시 눌러 주세요';}
-  setTimeout(()=>{b.textContent='이미지 저장';b.disabled=false},2000);
+  setTimeout(()=>{b.textContent='이미지 저장 (A4 인쇄용)';b.disabled=false},2000);
 }
 ['name','url','color'].forEach(id=>$(id).addEventListener('input',make));
 window.addEventListener('resize',fit);make();
